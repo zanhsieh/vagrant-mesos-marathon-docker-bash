@@ -173,6 +173,16 @@ sed -i 's|mesos|marathon|' /etc/marathon/conf/zk
 echo "Restart zookeeper"
 zookeeper-server restart
 
+#cp `which zookeeper-server` /etc/init.d/zookeeper-server
+
+# TODO: insert lines below into after #!/bin/bash
+# chkconfig: 2345 95 20
+# description: Apache Zookeeper
+# processname: zookeeper-server
+
+#chkconfig --add zookeeper-server
+#chkconfig zookeeper-server on
+
 echo "Remove mesos-slave from mesos-master"
 rm -fR /etc/mesos-slave/
 rm -f /usr/sbin/mesos-slave
