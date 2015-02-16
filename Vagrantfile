@@ -173,15 +173,13 @@ sed -i 's|mesos|marathon|' /etc/marathon/conf/zk
 echo "Restart zookeeper"
 zookeeper-server restart
 
-#cp `which zookeeper-server` /etc/init.d/zookeeper-server
-
-# TODO: insert lines below into after #!/bin/bash
-# chkconfig: 2345 95 20
-# description: Apache Zookeeper
-# processname: zookeeper-server
-
-#chkconfig --add zookeeper-server
-#chkconfig zookeeper-server on
+echo "Add Zookeeper to start up service"
+if [ ! -f /etc/init.d/zookeeper-server ]; then
+  cp `which zookeeper-server` /etc/init.d/zookeeper-server
+  sed -i 's|^#!/bin/sh$|#!/bin/sh\n\n# chkconfig: 2345 95 20\n# description: Apache Zookeeper\n# processname: zookeeper-server|' /etc/init.d/zookeeper-server
+  chkconfig --add zookeeper-server
+  chkconfig zookeeper-server on
+fi
 
 echo "Remove mesos-slave from mesos-master"
 rm -fR /etc/mesos-slave/
